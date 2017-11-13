@@ -31,6 +31,10 @@ public class BootWin extends Activity
 		tao.app.agplan.var.Info.dayofweek=c.get(Calendar.DAY_OF_WEEK);
 		tao.app.agplan.var.Info.dayofyear=c.get(Calendar.DAY_OF_YEAR);
 		
+		tao.app.agplan.var.Info.s_year=c.get(Calendar.YEAR);
+		tao.app.agplan.var.Info.s_month=c.get(Calendar.MONTH)+1;
+		tao.app.agplan.var.Info.s_dayofmonth=c.get(Calendar.DAY_OF_MONTH);
+		
 		isFirstOpen=false;//这里处理是不是第一次使用本软件【需修改】
 	}
 	

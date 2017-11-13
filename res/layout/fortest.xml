@@ -4,8 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <tao.app.agplan.ui.Calendar 
+    <tao.app.agplan.ui.Calendar
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+        
+    </tao.app.agplan.ui.Calendar>
 
 </LinearLayout>

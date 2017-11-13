@@ -63,7 +63,9 @@
                 android:layout_weight="6"
                 android:orientation="horizontal">
                 
-                
+                <tao.app.agplan.ui.Calendar 
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
                 
             </LinearLayout>
             <!--中部布局】-->

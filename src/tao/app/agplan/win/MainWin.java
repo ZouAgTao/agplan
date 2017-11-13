@@ -91,6 +91,8 @@ public class MainWin extends Activity implements OnClickListener
 			{
 				w=ly_main.getWidth();
 				h=ly_main.getHeight();
+				tao.app.agplan.var.Info.w=w;
+				tao.app.agplan.var.Info.h=h;
 			}
 		});
 		

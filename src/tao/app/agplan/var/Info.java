@@ -2,6 +2,9 @@ package tao.app.agplan.var;
 
 public class Info
 {
+	public static int w=0;
+	public static int h=0;
+	
 	public static boolean is_opensidebar=false;
 	public static boolean is_running=false;
 	

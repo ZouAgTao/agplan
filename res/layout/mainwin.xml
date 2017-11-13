@@ -4,6 +4,113 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    
+    <!--【主框架布局-->
+    <AbsoluteLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="left">
+        
+        <!--【主界面布局-->
+        <LinearLayout 
+            android:layout_x="0dp"
+            android:layout_y="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/ly_main">
+            
+            <!--【标题栏布局-->
+            <RelativeLayout 
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/titlebar">
+                
+                <Button 
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/btn_opensidebar"
+                    android:background="@drawable/btn_sidebar"
+                    android:layout_margin="8dp"/>
+                
+                <TextView android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:textSize="25sp"
+                    android:text="日期"
+                    android:textColor="@android:color/white"
+                    android:id="@+id/txv_data"/>
+                
+                <Button 
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/btn_addnewtask"
+                    android:background="@drawable/btn_addnewtask"
+                    android:layout_margin="8dp"/>
+                
+            </RelativeLayout>
+            <!--标题栏布局】-->
+            
+            <!--【中部布局-->
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="6"
+                android:orientation="horizontal">
+                
+                
+                
+            </LinearLayout>
+            <!--中部布局】-->
+            
+            <!--【操作栏布局-->
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:orientation="horizontal">
+                
+            </LinearLayout>
+            <!--操作栏布局】-->
+            
+        </LinearLayout>
+        <!--主界面布局】-->
+        
+        <!--【遮罩层布局-->
+        <LinearLayout 
+            android:layout_x="-1000dp"
+            android:layout_y="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/ly_mask"
+            android:clickable="true"
+            android:background="@android:color/darker_gray"
+            android:alpha="0">
+            
+        </LinearLayout>
+        <!--遮罩层布局】-->
+        
+        <!--【侧滑栏布局-->
+        <LinearLayout 
+            android:layout_x="-1000dp"
+            android:layout_y="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/ly_sidebar"
+            android:clickable="true"
+            android:background="@android:color/white">
+            
+        </LinearLayout>
+        <!--侧滑栏布局】-->
+        
+    </AbsoluteLayout>
+    <!--主框架布局】-->
     
 </LinearLayout>

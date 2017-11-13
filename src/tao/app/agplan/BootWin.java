@@ -1,5 +1,7 @@
 package tao.app.agplan;
 
+import java.util.Calendar;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +24,13 @@ public class BootWin extends Activity
 	{
 		super.onStart();
 		//这里检查和初始化
+		Calendar c=Calendar.getInstance();
+		tao.app.agplan.var.Info.year=c.get(Calendar.YEAR);
+		tao.app.agplan.var.Info.month=c.get(Calendar.MONTH)+1;
+		tao.app.agplan.var.Info.dayofmonth=c.get(Calendar.DAY_OF_MONTH);
+		tao.app.agplan.var.Info.dayofweek=c.get(Calendar.DAY_OF_WEEK);
+		tao.app.agplan.var.Info.dayofyear=c.get(Calendar.DAY_OF_YEAR);
+		
 		isFirstOpen=false;//这里处理是不是第一次使用本软件【需修改】
 	}
 	
@@ -29,6 +38,24 @@ public class BootWin extends Activity
 	{
 		super.onResume();
 		//这里处理启动判断
+		
+		Intent intent;
+		if(isFirstOpen)
+		{
+			intent=new Intent(BootWin.this, tao.app.agplan.win.WelcomeActivity.class);
+		}
+		else
+		{
+			intent=new Intent(BootWin.this, tao.app.agplan.win.MainWin.class);
+		}
+		
+		if(tao.app.agplan.var.Info.is_running)
+		{
+			startActivity(intent);
+
+			finish();
+			return;
+		}
 		
 		new Handler().postDelayed(new Runnable()
 		{

@@ -19,7 +19,13 @@
             </intent-filter>
         </activity>
         <activity android:launchMode="singleTask" android:name=".win.WelcomeActivity"></activity>
-        <activity android:name=".win.MainWin" android:launchMode="singleTask"></activity>
+        <activity android:name=".win.MainWin" android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="tao.app.agplan.main"/>
+                <category android:name="android.intent.category.HOME"/>
+            </intent-filter>
+        </activity>
+        <activity android:launchMode="singleTask" android:name=".win.NewTaskWin"></activity>
     </application>
 
 </manifest>

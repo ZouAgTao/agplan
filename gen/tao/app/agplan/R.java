@@ -20,9 +20,10 @@ public final class R {
     public static final class id {
         public static final int btn_addnewtask=0x7f060003;
         public static final int btn_opensidebar=0x7f060001;
+        public static final int calendar=0x7f060004;
         public static final int ly_main=0x7f060000;
-        public static final int ly_mask=0x7f060004;
-        public static final int ly_sidebar=0x7f060005;
+        public static final int ly_mask=0x7f060005;
+        public static final int ly_sidebar=0x7f060006;
         public static final int txv_data=0x7f060002;
     }
     public static final class layout {

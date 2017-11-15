@@ -10,12 +10,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import tao.app.agplan.R;
+import tao.app.agplan.ui.Calendar;
+import tao.app.agplan.ui.Calendar.OnDateChangeListener;
 
 public class MainWin extends Activity implements OnClickListener
 {
 	LinearLayout ly_sidebar,ly_main,ly_mask;
 	Button btn_opensidebar,btn_addnewtask;
 	TextView txv_data;
+	Calendar calendar;
 	
 	int w=0;
 	int h=0;
@@ -61,6 +64,8 @@ public class MainWin extends Activity implements OnClickListener
 		btn_addnewtask=(Button)findViewById(R.id.btn_addnewtask);
 		
 		txv_data=(TextView)findViewById(R.id.txv_data);
+		
+		calendar=(Calendar)findViewById(R.id.calendar);
 	}
 	
 	private void modifyUI()
@@ -113,6 +118,14 @@ public class MainWin extends Activity implements OnClickListener
 		btn_addnewtask.setOnClickListener(this);
 		
 		ly_mask.setOnClickListener(this);
+		
+		calendar.setOnDateChangeListener(new OnDateChangeListener()
+		{
+			public void onSelectedDayChange(Calendar view, int year, int month, int dayOfMonth)
+			{
+				txv_data.setText(year+"Äê"+month+"ÔÂ"+dayOfMonth+"ÈÕ");
+			}
+		});
 	}
 	
 	private void Init()

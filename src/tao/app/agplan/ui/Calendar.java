@@ -1,11 +1,13 @@
 package tao.app.agplan.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+@SuppressLint("ClickableViewAccessibility")
 public class Calendar extends View
 {
 	int width=0;
@@ -21,13 +23,11 @@ public class Calendar extends View
 	int lx=0;
 	int ly=0;
 	
+	float r=0;
+	
 	long from=0;
 	long left=0;
 	long right=0;
-	
-	//long now=0;
-	
-	float r=0;
 	
 	boolean first=true;
 	boolean start=true;
@@ -78,25 +78,26 @@ public class Calendar extends View
 		text.setAntiAlias(true);
 		
 		line=new Paint(text);
-		line.setStrokeWidth(3);
+		line.setARGB(255, 25, 160, 240);
+		line.setStrokeWidth(5);
 		
-		today=new Paint(line);
+		today=new Paint(text);
+		today.setStrokeWidth(3);
 		today.setARGB(255, 25, 160, 240);
-		today.setStyle(Paint.Style.STROKE);
 		
 		choose=new Paint(today);
-		choose.setARGB(140, 25, 160, 240);
+		choose.setAlpha(140);
 		choose.setStyle(Paint.Style.FILL_AND_STROKE);
 		
 		taskpoint=new Paint(choose);
-		taskpoint.setARGB(255, 25, 160, 240);
+		taskpoint.setAlpha(255);
 		
-		line.setARGB(255, 25, 160, 240);
+		today.setStyle(Paint.Style.STROKE);
 	}
 	
 	public void updateInfo()
 	{
-		//getcxandcy();
+		getcxandcy();
 		getTaskPoint();
 	}
 	
@@ -110,12 +111,14 @@ public class Calendar extends View
 		//这里到时候做好了store部分要修改成真的
 		yue=tao.app.agplan.func.Operation.howmuchday(tao.app.agplan.var.Info.year,tao.app.agplan.var.Info.month);
 		
+		//模拟部分
 		boolean a=true;
 		for(int i=0;i<yue;i++)
 		{
 			has_task[i]=a;
 			a=!a;
 		}
+		//模拟部分
 		
 	}
 	
@@ -125,8 +128,10 @@ public class Calendar extends View
 		int t_y=tao.app.agplan.var.Info.s_year;
 		int t_m=tao.app.agplan.var.Info.s_month;
 		int t_d=tao.app.agplan.var.Info.s_dayofmonth;
+		
 		dow= (1+2*t_m+3*(t_m+1)/5+t_y+t_y/4-t_y/100+t_y/400)%7;
 		dow++;
+		
 		if(dow==7)
 		{
 			dow=0;
@@ -176,7 +181,6 @@ public class Calendar extends View
 	
 	private void d_line(Canvas c, Paint p)
 	{
-		
 		if(!first)
 		{
 			c.drawLine(0, 5, width, 5, p);
@@ -195,7 +199,7 @@ public class Calendar extends View
 		
 		right=System.currentTimeMillis();
 		
-		float per=((float)(right-left))/1000;
+		float per=((float)(right-left))/3000;
 		
 		if(per>1)
 		{
@@ -215,12 +219,11 @@ public class Calendar extends View
 	{
 		int cur=1;
 		int t_y=tao.app.agplan.var.Info.s_year;
-		int t_m=tao.app.agplan.var.Info.s_month;
-//		int t_d=tao.app.agplan.var.Info.s_dayofmonth;
-		
+		int t_m=tao.app.agplan.var.Info.s_month;	
 		
 		dow=(1+2*t_m+3*(t_m+1)/5+t_y+t_y/4-t_y/100+t_y/400)%7;
 		dow++;
+		
 		if(dow==7)
 		{
 			dow=0;
@@ -232,9 +235,10 @@ public class Calendar extends View
 		for(int i=dow+1;i<=7;i++,x+=gw,cur++)
 		{
 			c.drawText(cur+"", x, y, p);
+			
 			if(has_task[cur-1])
 			{
-				c.drawCircle(x,y+gh/8 ,gh/15,taskpoint );
+				c.drawCircle(x,y+gh/8 ,gh/15,taskpoint);
 			}
 		}
 		
@@ -243,20 +247,22 @@ public class Calendar extends View
 		
 		yue=tao.app.agplan.func.Operation.howmuchday(t_y, t_m);
 		
+		int dom=tao.app.agplan.var.Info.dayofmonth;
+		
 		for(int i=3;i<=7;i++,y+=gh)
 		{
 			for(int j=1;j<=7;j++,x+=gw,cur++)
 			{
-				if(cur==tao.app.agplan.var.Info.dayofmonth)
+				if(cur==dom)
 				{
-					//c.drawRect((j-1)*gw+5,(i-1)*gh+5, j*gw-5, i*gh-5, today);
 					c.drawCircle((float)((j-0.5)*gw),(float)((i-0.4)*gh),r, today);
 				}
 				
 				c.drawText(cur+"", x, y, p);
+				
 				if(has_task[cur-1])
 				{
-					c.drawCircle(x,y+gh/8,gh/15,taskpoint );
+					c.drawCircle(x,y+gh/8,gh/15,taskpoint);
 				}
 				if(cur>=yue)
 				{
@@ -304,30 +310,29 @@ public class Calendar extends View
 	{
 		super.onDraw(canvas);
 		d_week(canvas,text);
-		d_choose(canvas,choose);
 		d_day(canvas,text);
+		d_choose(canvas,choose);
 		d_line(canvas,line);
 	}
 
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
 	{
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		
 		width=MeasureSpec.getSize(widthMeasureSpec);
 		height=MeasureSpec.getSize(heightMeasureSpec);
 		gw=width/7;
 		gh=height/7;
 		x=gw/2;
 		y=gh/2;
+		
 		r=((float)gh)/13*6;
 		
 		today.setStrokeWidth(gw/15);
-		
 		text.setTextSize(width/15);
 		
 		redtext=new Paint(text);
 		redtext.setColor(Color.RED);
-		
-		line.setStrokeWidth(5);
 	}
 	
 	public Calendar(Context context, AttributeSet attrs)
@@ -404,7 +409,6 @@ public class Calendar extends View
 	
 	private void setCheckedDate()
 	{
-		//这里将cx和cy变成s日期
 		tao.app.agplan.var.Info.s_year=tao.app.agplan.var.Info.year;
 		tao.app.agplan.var.Info.s_month=tao.app.agplan.var.Info.month;
 		int cur=1;

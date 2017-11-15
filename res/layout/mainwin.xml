@@ -42,7 +42,7 @@
                     android:textSize="25sp"
                     android:text="日期"
                     android:textColor="@android:color/white"
-                    android:id="@+id/txv_data"/>
+                    android:id="@+id/txv_date"/>
                 
                 <Button 
                     android:layout_alignParentRight="true"
@@ -94,9 +94,9 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:id="@+id/ly_mask"
-            android:clickable="true"
+            android:clickable="true"	
             android:background="@android:color/darker_gray"
-            android:alpha="0">
+            android:alpha="0.7">
             
         </LinearLayout>
         <!--遮罩层布局】-->

@@ -24,7 +24,7 @@ public final class R {
         public static final int ly_main=0x7f060000;
         public static final int ly_mask=0x7f060005;
         public static final int ly_sidebar=0x7f060006;
-        public static final int txv_data=0x7f060002;
+        public static final int txv_date=0x7f060002;
     }
     public static final class layout {
         public static final int bootwin=0x7f030000;

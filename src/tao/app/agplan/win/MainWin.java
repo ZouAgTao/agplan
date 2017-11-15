@@ -17,7 +17,7 @@ public class MainWin extends Activity implements OnClickListener
 {
 	LinearLayout ly_sidebar,ly_main,ly_mask;
 	Button btn_opensidebar,btn_addnewtask;
-	TextView txv_data;
+	TextView txv_date;
 	Calendar calendar;
 	
 	int w=0;
@@ -63,7 +63,7 @@ public class MainWin extends Activity implements OnClickListener
 		btn_opensidebar=(Button)findViewById(R.id.btn_opensidebar);
 		btn_addnewtask=(Button)findViewById(R.id.btn_addnewtask);
 		
-		txv_data=(TextView)findViewById(R.id.txv_data);
+		txv_date=(TextView)findViewById(R.id.txv_date);
 		
 		calendar=(Calendar)findViewById(R.id.calendar);
 	}
@@ -123,7 +123,7 @@ public class MainWin extends Activity implements OnClickListener
 		{
 			public void onSelectedDayChange(Calendar view, int year, int month, int dayOfMonth)
 			{
-				txv_data.setText(year+"年"+month+"月"+dayOfMonth+"日");
+				txv_date.setText(year+"年"+month+"月"+dayOfMonth+"日");
 			}
 		});
 	}
@@ -134,29 +134,41 @@ public class MainWin extends Activity implements OnClickListener
 		tao.app.agplan.var.Info.is_running=true;
 	}
 	
+	private void slideout()
+	{
+		if(tao.app.agplan.var.Info.is_opensidebar==false)
+		{
+			ly_mask.setX(0);
+			ly_sidebar.setX(-1*ly_sidebar.getWidth());
+			
+			ObjectAnimator oa=ObjectAnimator.ofFloat(ly_sidebar, "X",0);
+			oa.setDuration(300);
+			oa.start();
+			
+			tao.app.agplan.var.Info.is_opensidebar=true;
+		}
+	}
+	
+	private void slideback()
+	{
+		if(tao.app.agplan.var.Info.is_opensidebar)
+		{
+			ObjectAnimator oa=ObjectAnimator.ofFloat(ly_sidebar, "X",-1*ly_sidebar.getWidth());
+			oa.setDuration(200);
+			oa.start();
+			
+			ly_mask.setX(-1*w);
+			
+			tao.app.agplan.var.Info.is_opensidebar=false;
+		}
+	}
+	
 	public void onClick(View v)
 	{
 		switch (v.getId())
 		{
 		case R.id.btn_opensidebar:
-			if(tao.app.agplan.var.Info.is_opensidebar==false)
-			{
-				ly_sidebar.setX(-1*ly_sidebar.getWidth());
-				ly_sidebar.setY(0);
-				ly_mask.setX(0);
-				ly_mask.setY(0);
-				
-				ObjectAnimator oa1=ObjectAnimator.ofFloat(ly_sidebar, "X", 0);
-				oa1.setDuration(500);
-				
-				ObjectAnimator oa2=ObjectAnimator.ofFloat(ly_mask, "Alpha", 0,(float)0.7);
-				oa2.setDuration(500);
-				
-				oa1.start();
-				oa2.start();
-				
-				tao.app.agplan.var.Info.is_opensidebar=true;
-			}
+			slideout();
 			break;
 			
 		case R.id.btn_addnewtask:
@@ -165,17 +177,7 @@ public class MainWin extends Activity implements OnClickListener
 			break;
 			
 		case R.id.ly_mask:
-			if(tao.app.agplan.var.Info.is_opensidebar)
-			{
-				ObjectAnimator oa=ObjectAnimator.ofFloat(ly_sidebar, "X", -1*ly_sidebar.getWidth());
-				oa.setDuration(500);
-				
-				oa.start();
-				
-				ly_mask.setX(-1*ly_mask.getWidth());
-				
-				tao.app.agplan.var.Info.is_opensidebar=false;
-			}
+			slideback();
 			break;
 		default:
 			
@@ -189,16 +191,8 @@ public class MainWin extends Activity implements OnClickListener
 		{
 			if(tao.app.agplan.var.Info.is_opensidebar)
 			{
-				ObjectAnimator oa=ObjectAnimator.ofFloat(ly_sidebar, "X", -1*ly_sidebar.getWidth());
-				oa.setDuration(350);
-				
-				oa.start();
-				
-				ly_mask.setX(-1*ly_mask.getWidth());
-				
-				tao.app.agplan.var.Info.is_opensidebar=false;
-				
-				return false;
+				slideback();
+				return true;
 			}
 			
 			moveTaskToBack(false);

@@ -109,7 +109,7 @@ public class Calendar extends View
 	private void getTaskPoint()
 	{
 		//这里到时候做好了store部分要修改成真的
-		yue=tao.app.agplan.func.Operation.howmuchday(tao.app.agplan.var.Info.year,tao.app.agplan.var.Info.month);
+		yue=tao.app.agplan.func.Operation.howmuchday(tao.app.agplan.var.Info.s_year,tao.app.agplan.var.Info.s_month);
 		
 		//模拟部分
 		boolean a=true;
@@ -129,7 +129,7 @@ public class Calendar extends View
 		int t_m=tao.app.agplan.var.Info.s_month;
 		int t_d=tao.app.agplan.var.Info.s_dayofmonth;
 		
-		dow= (1+2*t_m+3*(t_m+1)/5+t_y+t_y/4-t_y/100+t_y/400)%7;
+		dow=(1+2*t_m+3*(t_m+1)/5+t_y+t_y/4-t_y/100+t_y/400)%7;
 		dow++;
 		
 		if(dow==7)
@@ -159,9 +159,6 @@ public class Calendar extends View
 				}
 			}
 		}
-		
-		lx=cx;
-		ly=cy;
 	}
 	
 	private void d_week(Canvas c,Paint p)
@@ -219,7 +216,7 @@ public class Calendar extends View
 	{
 		int cur=1;
 		int t_y=tao.app.agplan.var.Info.s_year;
-		int t_m=tao.app.agplan.var.Info.s_month;	
+		int t_m=tao.app.agplan.var.Info.s_month;
 		
 		dow=(1+2*t_m+3*(t_m+1)/5+t_y+t_y/4-t_y/100+t_y/400)%7;
 		dow++;
@@ -230,7 +227,7 @@ public class Calendar extends View
 		}
 		
 		x=gw/2+gw*dow;
-		y=gh/5*4+gh;
+		y=gh/5*3+gh;
 		
 		for(int i=dow+1;i<=7;i++,x+=gw,cur++)
 		{
@@ -253,9 +250,14 @@ public class Calendar extends View
 		{
 			for(int j=1;j<=7;j++,x+=gw,cur++)
 			{
-				if(cur==dom)
+				if(cur>yue)
 				{
-					c.drawCircle((float)((j-0.5)*gw),(float)((i-0.4)*gh),r, today);
+					break;
+				}
+				
+				if((cur==dom)&&(tao.app.agplan.var.Info.s_month==tao.app.agplan.var.Info.month)&&(tao.app.agplan.var.Info.s_year==tao.app.agplan.var.Info.year))
+				{
+					c.drawCircle((float)((j-0.5)*gw),(float)((i-0.5)*gh),r, today);
 				}
 				
 				c.drawText(cur+"", x, y, p);
@@ -264,13 +266,11 @@ public class Calendar extends View
 				{
 					c.drawCircle(x,y+gh/8,gh/15,taskpoint);
 				}
-				if(cur>=yue)
-				{
-					break;
-				}
 			}
+			
 			x=gw/2;
-			if(cur>=yue)
+			
+			if((cur-1)>=yue)
 			{
 				break;
 			}
@@ -286,22 +286,22 @@ public class Calendar extends View
 		
 		if(rad>r)
 		{
-			c.drawCircle((float)((cx-0.5)*gw),(float)((cy-0.4)*gh),r, p);
+			c.drawCircle((float)((cx-0.5)*gw),(float)((cy-0.5)*gh),r, p);
 			return;
 		}
 		
 		if((lx==cx)&&(ly==cy))
 		{
-			c.drawCircle((float)((cx-0.5)*gw),(float)((cy-0.4)*gh),r, p);
+			c.drawCircle((float)((cx-0.5)*gw),(float)((cy-0.5)*gh),r, p);
 			return;
 		}
 		
 		if((lx!=cx)||(ly!=cy))
 		{
-			c.drawCircle((float)((lx-0.5)*gw),(float)((ly-0.4)*gh),(r-rad), p);
+			c.drawCircle((float)((lx-0.5)*gw),(float)((ly-0.5)*gh),(r-rad), p);
 		}
 		
-		c.drawCircle((float)((cx-0.5)*gw),(float)((cy-0.4)*gh),rad, p);
+		c.drawCircle((float)((cx-0.5)*gw),(float)((cy-0.5)*gh),rad, p);
 		
 		invalidate();
 	}
@@ -348,8 +348,8 @@ public class Calendar extends View
 	public boolean onTouchEvent(MotionEvent event)
 	{
 		switch(event.getAction())
-		{
-		case MotionEvent.ACTION_DOWN:
+		{	
+		case MotionEvent.ACTION_UP:
 			
 			int mx=(int)(event.getX())/gw+1;
 			int my=(int)(event.getY())/gh+1;
@@ -396,21 +396,24 @@ public class Calendar extends View
 			
 			from=System.currentTimeMillis();
 			
+			updateInfo();
+			
 			invalidate();
 			
-			listener.onSelectedDayChange(this, tao.app.agplan.var.Info.s_year,tao.app.agplan.var.Info.s_month,tao.app.agplan.var.Info.s_dayofmonth);
+			if(listener!=null)
+			{
+				listener.onSelectedDayChange(this, tao.app.agplan.var.Info.s_year,tao.app.agplan.var.Info.s_month,tao.app.agplan.var.Info.s_dayofmonth);
+			}
 			
 			break;
 			
 		}
 		
-		return super.onTouchEvent(event);
+		return true;
 	}
 	
 	private void setCheckedDate()
 	{
-		tao.app.agplan.var.Info.s_year=tao.app.agplan.var.Info.year;
-		tao.app.agplan.var.Info.s_month=tao.app.agplan.var.Info.month;
 		int cur=1;
 		
 		if(dow==7)

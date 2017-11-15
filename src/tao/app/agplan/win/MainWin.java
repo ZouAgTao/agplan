@@ -1,27 +1,34 @@
 package tao.app.agplan.win;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Window;
-import android.view.KeyEvent;
-import android.view.View;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import tao.app.agplan.R;
 import tao.app.agplan.ui.Calendar;
-import tao.app.agplan.ui.Calendar.OnDateChangeListener;
 
 public class MainWin extends Activity implements OnClickListener
 {
 	LinearLayout ly_sidebar,ly_main,ly_mask;
 	Button btn_opensidebar,btn_addnewtask;
 	TextView txv_date;
-	Calendar calendar;
+	
+	private Calendar c1,c2,c3;
+	private ViewPager viewPager;
+	private List<Calendar> viewList;
 	
 	int w=0;
 	int h=0;
+	int lastpos=Integer.MAX_VALUE/2;
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -32,6 +39,7 @@ public class MainWin extends Activity implements OnClickListener
 		
 		Init();
 		bindID();
+		viewPagerSet();
 	}
 	
 	protected void onStart()
@@ -46,8 +54,14 @@ public class MainWin extends Activity implements OnClickListener
 		super.onResume();
 		
 		modifyUI();
+		winShow();
 	}
 	
+	private void winShow()
+	{
+		txv_date.setText(tao.app.agplan.var.Info.s_year+"å¹´"+tao.app.agplan.var.Info.s_month+"æœˆ"+tao.app.agplan.var.Info.s_dayofmonth+"æ—¥");
+	}
+
 	protected void onDestroy()
 	{
 		tao.app.agplan.var.Info.is_running=false;
@@ -60,12 +74,12 @@ public class MainWin extends Activity implements OnClickListener
 		ly_sidebar=(LinearLayout)findViewById(R.id.ly_sidebar);
 		ly_mask=(LinearLayout)findViewById(R.id.ly_mask);
 		
+		viewPager=(ViewPager)findViewById(R.id.viewpager);
+		
 		btn_opensidebar=(Button)findViewById(R.id.btn_opensidebar);
 		btn_addnewtask=(Button)findViewById(R.id.btn_addnewtask);
 		
 		txv_date=(TextView)findViewById(R.id.txv_date);
-		
-		calendar=(Calendar)findViewById(R.id.calendar);
 	}
 	
 	private void modifyUI()
@@ -101,6 +115,14 @@ public class MainWin extends Activity implements OnClickListener
 			}
 		});
 		
+		txv_date.post(new Runnable()
+		{
+			public void run()
+			{
+				txv_date.setTextSize(tao.app.agplan.var.Info.w/40);
+			}
+		});
+		
 		ly_sidebar.post(new Runnable()
 		{
 			public void run()
@@ -118,20 +140,87 @@ public class MainWin extends Activity implements OnClickListener
 		btn_addnewtask.setOnClickListener(this);
 		
 		ly_mask.setOnClickListener(this);
-		
-		calendar.setOnDateChangeListener(new OnDateChangeListener()
-		{
-			public void onSelectedDayChange(Calendar view, int year, int month, int dayOfMonth)
-			{
-				txv_date.setText(year+"Äê"+month+"ÔÂ"+dayOfMonth+"ÈÕ");
-			}
-		});
 	}
 	
 	private void Init()
 	{
 		tao.app.agplan.var.Info.is_opensidebar=false;
 		tao.app.agplan.var.Info.is_running=true;
+	}
+	
+	@SuppressWarnings("deprecation")
+	private void viewPagerSet()
+	{
+		c1=new Calendar(this);
+		c2=new Calendar(this);
+		c3=new Calendar(this);
+		
+		viewList=new ArrayList<Calendar>();
+		
+		viewList.add(c1);
+		viewList.add(c2);
+		viewList.add(c3);
+		
+		PagerAdapter pa=new PagerAdapter()
+		{
+			public boolean isViewFromObject(View argl, Object argr)
+			{
+				return argl==argr;
+			}
+			
+			public int getCount()
+			{
+				return Integer.MAX_VALUE;
+			}
+			
+			public void destroyItem(ViewGroup container,int position,Object object)
+			{
+				
+			}
+			
+			public Object instantiateItem(ViewGroup container,int position)
+			{
+				if(position>lastpos)
+				{
+					tao.app.agplan.func.Operation.addDate();
+				}
+				else if(position<lastpos)
+				{
+					tao.app.agplan.func.Operation.minusDate();
+				}
+				for(int i=0;i<3;i++)
+				{
+					viewList.get(i).updateInfo();
+					viewList.get(i).updateView();
+				}
+				txv_date.setText(tao.app.agplan.var.Info.s_year+"å¹´"+tao.app.agplan.var.Info.s_month+"æœˆ"+tao.app.agplan.var.Info.s_dayofmonth+"æ—¥");
+				lastpos=position;
+				
+				position%=viewList.size();
+				
+	             if (position<0)
+	             {
+	                 position=viewList.size()+position;
+	             }
+	             
+	             View view=viewList.get(position);
+	             
+	             ViewParent vp=view.getParent();
+	             
+	             if (vp!=null)
+	             {
+	                 ViewGroup parent=(ViewGroup)vp;
+	                 parent.removeView(view);
+	             }
+	             
+	             container.addView(view);  
+	             
+	             return view;
+			}
+		};
+		
+		viewPager.setAdapter(pa);
+		viewPager.setCurrentItem(Integer.MAX_VALUE/2);
 	}
 	
 	private void slideout()

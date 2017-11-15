@@ -64,11 +64,12 @@
                 android:orientation="horizontal"
                 android:background="@android:color/white">
                 
-                <tao.app.agplan.ui.Calendar 
+                <tao.app.agplan.ui.TViewPager
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:clickable="true"
-                    android:id="@+id/calendar"/>
+                    android:id="@+id/viewpager">
+                    
+                </tao.app.agplan.ui.TViewPager>
                 
             </LinearLayout>
             <!--中部布局】-->

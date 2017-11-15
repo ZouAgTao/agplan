@@ -30,6 +30,8 @@ public class MainWin extends Activity implements OnClickListener
 	int h=0;
 	int lastpos=Integer.MAX_VALUE/2;
 	
+	boolean is_jump=false;
+	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
@@ -139,6 +141,8 @@ public class MainWin extends Activity implements OnClickListener
 		btn_opensidebar.setOnClickListener(this);
 		btn_addnewtask.setOnClickListener(this);
 		
+		txv_date.setOnClickListener(this);
+		
 		ly_mask.setOnClickListener(this);
 	}
 	
@@ -188,6 +192,7 @@ public class MainWin extends Activity implements OnClickListener
 				{
 					tao.app.agplan.func.Operation.minusDate();
 				}
+				
 				for(int i=0;i<3;i++)
 				{
 					viewList.get(i).updateInfo();
@@ -213,7 +218,9 @@ public class MainWin extends Activity implements OnClickListener
 	                 parent.removeView(view);
 	             }
 	             
-	             container.addView(view);  
+	             container.addView(view);
+	             
+	             is_jump=false;
 	             
 	             return view;
 			}
@@ -267,6 +274,19 @@ public class MainWin extends Activity implements OnClickListener
 			
 		case R.id.ly_mask:
 			slideback();
+			break;
+			
+		case R.id.txv_date:
+			tao.app.agplan.var.Info.s_year=tao.app.agplan.var.Info.year;
+			tao.app.agplan.var.Info.s_month=tao.app.agplan.var.Info.month;
+			tao.app.agplan.var.Info.s_dayofmonth=tao.app.agplan.var.Info.dayofmonth;
+			
+			for(int i=0;i<3;i++)
+			{
+				viewList.get(i).updateInfo();
+				viewList.get(i).updateView();
+			}
+			txv_date.setText(tao.app.agplan.var.Info.s_year+"年"+tao.app.agplan.var.Info.s_month+"月"+tao.app.agplan.var.Info.s_dayofmonth+"日");
 			break;
 		default:
 			

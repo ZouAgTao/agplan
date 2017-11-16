@@ -3,7 +3,9 @@ package tao.app.agplan;
 import java.util.Calendar;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Window;
@@ -35,7 +37,10 @@ public class BootWin extends Activity
 		tao.app.agplan.var.Info.s_month=c.get(Calendar.MONTH)+1;
 		tao.app.agplan.var.Info.s_dayofmonth=c.get(Calendar.DAY_OF_MONTH);
 		
-		isFirstOpen=false;//这里处理是不是第一次使用本软件【需修改】
+		SQLiteDatabase db=openOrCreateDatabase("agplan", Context.MODE_PRIVATE, null);
+		tao.app.agplan.store.SQLiteDateBaseStore.openOrCreatDB(db);
+		
+		isFirstOpen=tao.app.agplan.store.SQLiteDateBaseStore.isFirstUsed();
 	}
 	
 	protected void onResume()

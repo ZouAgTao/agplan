@@ -2,6 +2,7 @@ package tao.app.agplan.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -108,18 +109,35 @@ public class Calendar extends View
 	
 	private void getTaskPoint()
 	{
-		//这里到时候做好了store部分要修改成真的
 		yue=tao.app.agplan.func.Operation.howmuchday(tao.app.agplan.var.Info.s_year,tao.app.agplan.var.Info.s_month);
 		
-		//模拟部分
-		boolean a=true;
+		Cursor cur=tao.app.agplan.store.SQLiteDateBaseStore.getcur("task",tao.app.agplan.var.Info.s_year,tao.app.agplan.var.Info.s_month);
+		
 		for(int i=0;i<yue;i++)
 		{
-			has_task[i]=a;
-			a=!a;
+			has_task[i]=false;
 		}
-		//模拟部分
 		
+		if(cur==null)
+		{
+			for(int i=0;i<yue;i++)
+			{
+				has_task[i]=false;
+			}
+			return;
+		}
+		
+		if(cur.moveToFirst())
+		{
+			for(int i=0;i<cur.getCount();i++)
+			{
+				cur.moveToPosition(i);
+				has_task[cur.getInt(0)-1]=true;
+			}
+		}
+		
+		cur.close();
+		return;
 	}
 	
 	private void getcxandcy()

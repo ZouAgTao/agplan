@@ -42,6 +42,8 @@ public class MainWin extends Activity implements OnClickListener
 		Init();
 		bindID();
 		viewPagerSet();
+		
+//		tao.app.agplan.store.SQLiteDateBaseStore.insertTest();
 	}
 	
 	protected void onStart()

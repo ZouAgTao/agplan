@@ -17,4 +17,6 @@ public class Info
 	public static int s_year=2017;
 	public static int s_month=11;
 	public static int s_dayofmonth=11;
+	
+	public final static int version=-1;
 }

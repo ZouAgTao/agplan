@@ -4,6 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    
+    <tao.app.agplan.ui.TViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/lyv_welcome">
+    </tao.app.agplan.ui.TViewPager>
     
 </LinearLayout>

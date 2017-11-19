@@ -118,15 +118,15 @@
             android:orientation="vertical"
             android:id="@+id/ly_mask"
             android:clickable="true"	
-            android:background="@android:color/darker_gray"
-            android:alpha="0.7">
+            android:background="@drawable/mask"
+            android:alpha="0.3">
             
         </LinearLayout>
         <!--遮罩层布局】-->
         
         <!--【侧滑栏布局-->
         <LinearLayout 
-            android:layout_x="-1000dp"
+            android:layout_x="1000dp"
             android:layout_y="0dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

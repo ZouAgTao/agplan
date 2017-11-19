@@ -3,19 +3,20 @@ package tao.app.agplan.win;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.*;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.*;
 import tao.app.agplan.R;
 import tao.app.agplan.ui.Calendar;
+import tao.app.agplan.ui.Calendar.OnDateChangeListener;
 
 public class MainWin extends Activity implements OnClickListener
 {
@@ -25,6 +26,7 @@ public class MainWin extends Activity implements OnClickListener
 	ListView tasklist;
 	
 	private Calendar c1,c2,c3;
+//	private Calendar nowc;
 	private ViewPager viewPager;
 	private List<Calendar> viewList;
 	
@@ -33,6 +35,13 @@ public class MainWin extends Activity implements OnClickListener
 	int lastpos=Integer.MAX_VALUE/2;
 	
 	boolean is_jump=false;
+	
+	//-----此处为测试代码，开发结束后要删除【test】
+	
+	String[] testtext;
+	ArrayAdapter<String>adpt;
+	
+	//------------------------------------------
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -44,8 +53,6 @@ public class MainWin extends Activity implements OnClickListener
 		Init();
 		bindID();
 		viewPagerSet();
-		
-//		tao.app.agplan.store.SQLiteDateBaseStore.insertTest();
 	}
 	
 	protected void onStart()
@@ -66,6 +73,16 @@ public class MainWin extends Activity implements OnClickListener
 	private void winShow()
 	{
 		txv_date.setText(tao.app.agplan.var.Info.s_year+"年"+tao.app.agplan.var.Info.s_month+"月"+tao.app.agplan.var.Info.s_dayofmonth+"日");
+		
+		//-----此处为测试代码，开发结束后要删除【test】
+		
+		testtext=new String[]{"任务1","任务2","任务3","任务4","任务5","任务6","任务7","任务8","任务9","任务10"};
+		
+		//------------------------------------------
+		
+		adpt=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, testtext);
+		
+		tasklist.setAdapter(adpt);
 	}
 
 	protected void onDestroy()
@@ -87,12 +104,6 @@ public class MainWin extends Activity implements OnClickListener
 		
 		txv_date=(TextView)findViewById(R.id.txv_date);
 		tasklist=(ListView)findViewById(R.id.tasklist);
-		
-		//-----此处为测试代码，开发结束后要删除【test】
-		
-		tasklist.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,new String[]{"任务1","任务2","任务3","任务4","任务5","任务6","任务7"}));
-		
-		//------------------------------------------
 	}
 	
 	private void modifyUI()
@@ -210,7 +221,6 @@ public class MainWin extends Activity implements OnClickListener
 					viewList.get(i).updateInfo();
 					viewList.get(i).updateView();
 				}
-				txv_date.setText(tao.app.agplan.var.Info.s_year+"年"+tao.app.agplan.var.Info.s_month+"月"+tao.app.agplan.var.Info.s_dayofmonth+"日");
 				lastpos=position;
 				
 				position%=viewList.size();
@@ -234,6 +244,8 @@ public class MainWin extends Activity implements OnClickListener
 	             
 	             is_jump=false;
 	             
+//	             updatelist();
+	             
 	             return view;
 			}
 		};
@@ -241,6 +253,12 @@ public class MainWin extends Activity implements OnClickListener
 		viewPager.setAdapter(pa);
 		viewPager.setCurrentItem(Integer.MAX_VALUE/2);
 	}
+	
+//	private void updatelist()
+//	{
+//		txv_date.setText(tao.app.agplan.var.Info.s_year+"年"+tao.app.agplan.var.Info.s_month+"月"+tao.app.agplan.var.Info.s_dayofmonth+"日");
+//		adpt.clear();
+//	}
 	
 	private void slideout()
 	{
@@ -250,8 +268,12 @@ public class MainWin extends Activity implements OnClickListener
 			ly_sidebar.setX(-1*ly_sidebar.getWidth());
 			
 			ObjectAnimator oa=ObjectAnimator.ofFloat(ly_sidebar, "X",0);
-			oa.setDuration(300);
-			oa.start();
+			ObjectAnimator ob=ObjectAnimator.ofFloat(ly_main, "x", ly_sidebar.getWidth());
+			
+			AnimatorSet anim=new AnimatorSet();
+			anim.play(ob).with(oa);
+			anim.setDuration(400);
+			anim.start();
 			
 			tao.app.agplan.var.Info.is_opensidebar=true;
 		}
@@ -262,10 +284,14 @@ public class MainWin extends Activity implements OnClickListener
 		if(tao.app.agplan.var.Info.is_opensidebar)
 		{
 			ObjectAnimator oa=ObjectAnimator.ofFloat(ly_sidebar, "X",-1*ly_sidebar.getWidth());
-			oa.setDuration(200);
-			oa.start();
+			ObjectAnimator ob=ObjectAnimator.ofFloat(ly_main, "x", 0);
 			
-			ly_mask.setX(-1*w);
+			AnimatorSet anim=new AnimatorSet();
+			anim.play(ob).with(oa);
+			anim.setDuration(300);
+			anim.start();
+			
+			ly_mask.setX(w);
 			
 			tao.app.agplan.var.Info.is_opensidebar=false;
 		}

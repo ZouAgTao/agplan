@@ -309,7 +309,7 @@ public class Calendar extends View
 	
 	private void d_choose(Canvas c, Paint p)
 	{
-		float rad=(System.currentTimeMillis()-from)*(float)0.25;
+		float rad=(System.currentTimeMillis()-from)*(float)0.3;
 		
 		if(rad>r)
 		{

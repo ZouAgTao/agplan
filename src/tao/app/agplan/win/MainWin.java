@@ -10,9 +10,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.*;
 import tao.app.agplan.R;
 import tao.app.agplan.ui.Calendar;
@@ -26,7 +26,7 @@ public class MainWin extends Activity implements OnClickListener
 	ListView tasklist;
 	
 	private Calendar c1,c2,c3;
-//	private Calendar nowc;
+	private Calendar nowv;
 	private ViewPager viewPager;
 	private List<Calendar> viewList;
 	
@@ -35,13 +35,6 @@ public class MainWin extends Activity implements OnClickListener
 	int lastpos=Integer.MAX_VALUE/2;
 	
 	boolean is_jump=false;
-	
-	//-----此处为测试代码，开发结束后要删除【test】
-	
-	String[] testtext;
-	ArrayAdapter<String>adpt;
-	
-	//------------------------------------------
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -74,15 +67,13 @@ public class MainWin extends Activity implements OnClickListener
 	{
 		txv_date.setText(tao.app.agplan.var.Info.s_year+"年"+tao.app.agplan.var.Info.s_month+"月"+tao.app.agplan.var.Info.s_dayofmonth+"日");
 		
-		//-----此处为测试代码，开发结束后要删除【test】
+		tasklist.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1));
 		
-		testtext=new String[]{"任务1","任务2","任务3","任务4","任务5","任务6","任务7","任务8","任务9","任务10"};
-		
-		//------------------------------------------
-		
-		adpt=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, testtext);
-		
-		tasklist.setAdapter(adpt);
+		if(nowv!=null)
+		{
+			nowv.updateInfo();
+			nowv.updateView();
+		}
 	}
 
 	protected void onDestroy()
@@ -216,11 +207,6 @@ public class MainWin extends Activity implements OnClickListener
 					tao.app.agplan.func.Operation.minusDate();
 				}
 				
-				for(int i=0;i<3;i++)
-				{
-					viewList.get(i).updateInfo();
-					viewList.get(i).updateView();
-				}
 				lastpos=position;
 				
 				position%=viewList.size();
@@ -244,7 +230,23 @@ public class MainWin extends Activity implements OnClickListener
 	             
 	             is_jump=false;
 	             
-//	             updatelist();
+	             ((Calendar)view).setOnDateChangeListener(new OnDateChangeListener()
+	             {
+					public void onSelectedDayChange(Calendar view, int year, int month, int dayOfMonth)
+					{
+						updatelist();
+					}
+				});
+	             
+	             updatelist();
+	             
+	             for(int i=0;i<3;i++)
+	             {
+	            	 viewList.get(i).updateInfo();
+	            	 viewList.get(i).updateView();
+	             }
+	             
+	             nowv=(Calendar)view;
 	             
 	             return view;
 			}
@@ -254,11 +256,13 @@ public class MainWin extends Activity implements OnClickListener
 		viewPager.setCurrentItem(Integer.MAX_VALUE/2);
 	}
 	
-//	private void updatelist()
-//	{
-//		txv_date.setText(tao.app.agplan.var.Info.s_year+"年"+tao.app.agplan.var.Info.s_month+"月"+tao.app.agplan.var.Info.s_dayofmonth+"日");
-//		adpt.clear();
-//	}
+	private void updatelist()
+	{
+		txv_date.setText(tao.app.agplan.var.Info.s_year+"年"+tao.app.agplan.var.Info.s_month+"月"+tao.app.agplan.var.Info.s_dayofmonth+"日");
+		
+		tao.app.agplan.store.SQLiteDateBaseStore.gettask();
+		tasklist.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,tao.app.agplan.var.Task.title));
+	}
 	
 	private void slideout()
 	{

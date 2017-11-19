@@ -1,12 +1,60 @@
 package tao.app.agplan.store;
 
+import java.util.ArrayList;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class SQLiteDateBaseStore
 {
 	static SQLiteDatabase db;
+	
+	public static void gettask()
+	{
+		db.execSQL("create table if not exists task(id integer primary key autoincrement,year integer,month integer,day integer,title text,content text)");
+		
+		Cursor cur=db.query("task", new String[]{"title","content"}, "year=? and month=? and day=?", new String[]{String.valueOf(tao.app.agplan.var.Info.s_year),String.valueOf(tao.app.agplan.var.Info.s_month),String.valueOf(tao.app.agplan.var.Info.s_dayofmonth)}, null, null, null);
+		
+		if(cur==null)
+		{
+			return;
+		}
+		
+		ArrayList<String> title=new ArrayList<String>();
+		ArrayList<String> content=new ArrayList<String>();
+		
+		if(cur.moveToFirst())
+		{
+			for(int i=0;i<cur.getCount();i++)
+			{
+				cur.moveToPosition(i);
+				title.add(cur.getString(0));
+				content.add(cur.getString(1));
+			}
+		}
+		
+		cur.close();
+		
+		tao.app.agplan.var.Task.title=new String[title.size()];
+		tao.app.agplan.var.Task.content=new String[content.size()];
+		title.toArray(tao.app.agplan.var.Task.title);
+		content.toArray(tao.app.agplan.var.Task.content);
+	}
+	
+	public static void puttask(String title,String content)
+	{
+		db.execSQL("create table if not exists task(id integer primary key autoincrement,year integer,month integer,day integer,title text,content text)");
+		
+		ContentValues cv=new ContentValues();
+		cv.put("year", tao.app.agplan.var.Info.s_year);
+		cv.put("month",tao.app.agplan.var.Info.s_month);
+		cv.put("day", tao.app.agplan.var.Info.s_dayofmonth);
+		cv.put("title",title);
+		cv.put("content", content);
+		db.insert("task", null,cv);
+	}
 	
 	public static void openOrCreatDB(SQLiteDatabase dbname)
 	{
@@ -47,18 +95,5 @@ public class SQLiteDateBaseStore
 		db.execSQL("create table if not exists task(id integer primary key autoincrement,year integer,month integer,day integer,title text,content text)");
 		
 		return db.query(table, new String[]{"day"}, "year=? and month=?", new String[]{String.valueOf(year),String.valueOf(month)}, null, null, null);
-	}
-	
-	
-	//以下是测试时使用的函数，开发完成后要删掉【Test】
-	public static void insertTest()
-	{
-		ContentValues cv=new ContentValues();
-		cv.put("year", "2017");
-		cv.put("month", "11");
-		cv.put("day", "18");
-		cv.put("title", "第一次成功使用SQLite并用于项目");
-		cv.put("content", "第一次成功使用SQLite并用于项目，感觉好高兴好高兴，离成功又进了小小的一步");
-		db.insert("task", null,cv);
 	}
 }

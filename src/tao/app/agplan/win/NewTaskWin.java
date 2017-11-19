@@ -22,6 +22,7 @@ public class NewTaskWin extends Activity
 	protected void onResume()
 	{
 		super.onResume();
+		tao.app.agplan.store.SQLiteDateBaseStore.puttask("±êÌâ", "ÄÚÈİ");
 	}
 	
 	protected void onDestroy()

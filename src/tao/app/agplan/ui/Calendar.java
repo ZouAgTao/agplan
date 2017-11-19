@@ -42,6 +42,8 @@ public class Calendar extends View
 	Paint today;
 	Paint choose;
 	Paint taskpoint;
+	Paint bg;
+	Paint pday;
 	
 	private OnDateChangeListener listener;
 	
@@ -71,12 +73,17 @@ public class Calendar extends View
 
 	private void MakePaint()
 	{
+		bg=new Paint();
+		bg.setARGB(120,37,181,202);
+		bg.setStyle(Paint.Style.FILL_AND_STROKE);
+		
 		text=new Paint();
 		text.setTextAlign(Paint.Align.CENTER);
-		text.setColor(Color.BLACK);
+		text.setColor(Color.WHITE);
 		text.setStrokeWidth(1);
 		text.setStyle(Paint.Style.FILL_AND_STROKE);
 		text.setAntiAlias(true);
+		text.setTypeface(tao.app.agplan.var.Info.font);
 		
 		line=new Paint(text);
 		line.setARGB(255, 25, 160, 240);
@@ -84,7 +91,7 @@ public class Calendar extends View
 		
 		today=new Paint(text);
 		today.setStrokeWidth(3);
-		today.setARGB(255, 25, 160, 240);
+		today.setARGB(180, 25, 160, 240);
 		
 		choose=new Paint(today);
 		choose.setAlpha(140);
@@ -181,6 +188,8 @@ public class Calendar extends View
 	
 	private void d_week(Canvas c,Paint p)
 	{
+		c.drawRect(0, 0, width, gh, bg);
+		
 		y=gh/7*5;
 		
 		c.drawText(weekname[0],x,y,redtext);
@@ -198,7 +207,7 @@ public class Calendar extends View
 	{
 		if(!first)
 		{
-			c.drawLine(0, 5, width, 5, p);
+			c.drawLine(0, 3, width, 3, p);
 			c.drawLine(0, gh, width, gh, p);
 			c.drawLine(0, height-3, width, height-3, p);
 			c.drawLine(3, 0, 3, height, p);
@@ -221,7 +230,7 @@ public class Calendar extends View
 			first=false;
 		}
 		
-		c.drawLine(0, 5, width*per, 5, p);
+		c.drawLine(0, 3, width*per, 3, p);
 		c.drawLine(0, gh, width*per, gh, p);
 		c.drawLine(0, height-3, width*per, height-3, p);
 		c.drawLine(3, 0, 3, height*per, p);
@@ -328,8 +337,8 @@ public class Calendar extends View
 	{
 		super.onDraw(canvas);
 		d_week(canvas,text);
-		d_day(canvas,text);
 		d_choose(canvas,choose);
+		d_day(canvas,pday);
 		d_line(canvas,line);
 	}
 
@@ -351,6 +360,9 @@ public class Calendar extends View
 		
 		redtext=new Paint(text);
 		redtext.setColor(Color.RED);
+		
+		pday=new Paint(text);
+		pday.setColor(Color.BLACK);
 	}
 	
 	public Calendar(Context context, AttributeSet attrs)

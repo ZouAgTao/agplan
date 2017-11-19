@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Window;
@@ -41,6 +42,8 @@ public class BootWin extends Activity
 		tao.app.agplan.store.SQLiteDateBaseStore.openOrCreatDB(db);
 		
 		isFirstOpen=tao.app.agplan.store.SQLiteDateBaseStore.isFirstUsed();
+		
+		tao.app.agplan.var.Info.font=Typeface.createFromAsset(getAssets(),"fonts/Hiragino.ttf");
 	}
 	
 	protected void onResume()

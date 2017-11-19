@@ -8,7 +8,8 @@
     <AbsoluteLayout 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="left">
+        android:layout_gravity="left"
+        android:background="@drawable/bg">
         
         <!--【主界面布局-->
         <LinearLayout 
@@ -39,10 +40,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:textSize="25sp"
+                    android:textSize="30sp"
                     android:text="日期"
                     android:textColor="@android:color/white"
-                    android:id="@+id/txv_date"/>
+                    android:id="@+id/txv_date"
+                    android:textStyle="bold"/>
                 
                 <Button 
                     android:layout_alignParentRight="true"
@@ -61,8 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="6"
-                android:orientation="horizontal"
-                android:background="@android:color/white">
+                android:orientation="horizontal">
                 
                 <tao.app.agplan.ui.TViewPager
                     android:layout_width="match_parent"
@@ -79,9 +80,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="4"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:background="@drawable/opbg">
                 
+                <!--【任务列表布局-->
+                <ListView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:id="@+id/tasklist"
+                    android:divider="@drawable/devideline"
+                    android:dividerHeight="4dp">
+                </ListView>
+                <!--任务列表布局】-->
                 
+                <!--【按钮栏布局-->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2">
+                    
+                </LinearLayout>
+                <!--按钮栏布局】-->
                 
             </LinearLayout>
             <!--操作栏布局】-->

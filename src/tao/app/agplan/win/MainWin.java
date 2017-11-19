@@ -6,6 +6,7 @@ import java.util.List;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -21,6 +22,7 @@ public class MainWin extends Activity implements OnClickListener
 	LinearLayout ly_sidebar,ly_main,ly_mask;
 	Button btn_opensidebar,btn_addnewtask;
 	TextView txv_date;
+	ListView tasklist;
 	
 	private Calendar c1,c2,c3;
 	private ViewPager viewPager;
@@ -84,6 +86,13 @@ public class MainWin extends Activity implements OnClickListener
 		btn_addnewtask=(Button)findViewById(R.id.btn_addnewtask);
 		
 		txv_date=(TextView)findViewById(R.id.txv_date);
+		tasklist=(ListView)findViewById(R.id.tasklist);
+		
+		//-----此处为测试代码，开发结束后要删除【test】
+		
+		tasklist.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,new String[]{"任务1","任务2","任务3","任务4","任务5","任务6","任务7"}));
+		
+		//------------------------------------------
 	}
 	
 	private void modifyUI()
@@ -124,6 +133,7 @@ public class MainWin extends Activity implements OnClickListener
 			public void run()
 			{
 				txv_date.setTextSize(tao.app.agplan.var.Info.w/40);
+				txv_date.setTypeface(tao.app.agplan.var.Info.font);
 			}
 		});
 		

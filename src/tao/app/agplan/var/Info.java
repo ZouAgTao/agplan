@@ -1,5 +1,7 @@
 package tao.app.agplan.var;
 
+import android.graphics.Typeface;
+
 public class Info
 {
 	public static int w=0;
@@ -19,4 +21,6 @@ public class Info
 	public static int s_dayofmonth=11;
 	
 	public final static int version=-1;
+	
+	public static Typeface font=null;
 }

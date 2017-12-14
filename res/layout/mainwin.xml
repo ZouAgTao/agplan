@@ -87,21 +87,35 @@
                 <ListView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="5"
+                    android:layout_weight="4"
                     android:id="@+id/tasklist"
                     android:divider="@drawable/devideline"
                     android:dividerHeight="4dp">
                 </ListView>
                 <!--任务列表布局】-->
                 
-                <!--【按钮栏布局-->
+                <!--【操作布局-->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2">
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+                    
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:id="@+id/btn_check"
+                        android:src="@drawable/btn_check"/>
+                    
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:id="@+id/btn_other"/>
                     
                 </LinearLayout>
-                <!--按钮栏布局】-->
+                <!--操作布局】-->
                 
             </LinearLayout>
             <!--操作栏布局】-->
@@ -133,7 +147,7 @@
             android:orientation="vertical"
             android:id="@+id/ly_sidebar"
             android:clickable="true"
-            android:background="@android:color/white">
+            android:background="@drawable/logo">
             
         </LinearLayout>
         <!--侧滑栏布局】-->

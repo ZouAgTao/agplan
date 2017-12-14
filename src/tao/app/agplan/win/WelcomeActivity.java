@@ -38,8 +38,6 @@ public class WelcomeActivity extends Activity
 		wel3=li.inflate(R.layout.wel3, null);
 		
 		viewList=new ArrayList<View>();
-		
-		
 		viewList.add(wel1);
 		viewList.add(wel2);
 		viewList.add(wel3);

@@ -2,8 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@drawable/bg">
     
+    <EditText 
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:textSize="30sp"
+        android:layout_margin="5dp"
+        android:id="@+id/edt_title"/>
     
+    <EditText 
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9"
+        android:textSize="30sp"
+        android:layout_margin="5dp"
+        android:id="@+id/edt_content"
+        android:inputType="textMultiLine"/>
+    
+    <Button 
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:text="Add"
+        android:id="@+id/btn_addtask"/>
     
 </LinearLayout>

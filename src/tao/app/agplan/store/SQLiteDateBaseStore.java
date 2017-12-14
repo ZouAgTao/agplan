@@ -5,11 +5,20 @@ import java.util.ArrayList;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+
 
 public class SQLiteDateBaseStore
 {
 	static SQLiteDatabase db;
+	
+	public static void deltask(String title,String content)
+	{
+		db.execSQL("create table if not exists task(id integer primary key autoincrement,year integer,month integer,day integer,title text,content text)");
+		
+		db.delete("task","title=? and content=? and year=? and month=? and day=?", new String[]{title,content,String.valueOf(tao.app.agplan.var.Info.s_year),String.valueOf(tao.app.agplan.var.Info.s_month),String.valueOf(tao.app.agplan.var.Info.s_dayofmonth)});
+		
+		
+	}
 	
 	public static void gettask()
 	{

@@ -1,6 +1,7 @@
 package tao.app.agplan.var;
 
 import android.graphics.Typeface;
+import tao.app.agplan.ui.Calendar;
 
 public class Info
 {
@@ -23,4 +24,5 @@ public class Info
 	public final static int version=-1;
 	
 	public static Typeface font=null;
+	
 }

@@ -10,10 +10,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
+import android.widget.AdapterView.OnItemClickListener;
 import tao.app.agplan.R;
 import tao.app.agplan.ui.Calendar;
 import tao.app.agplan.ui.Calendar.OnDateChangeListener;
@@ -25,10 +25,13 @@ public class MainWin extends Activity implements OnClickListener
 	TextView txv_date;
 	ListView tasklist;
 	
+	ImageView btn_check;
+	
 	private Calendar c1,c2,c3;
-	private Calendar nowv;
 	private ViewPager viewPager;
 	private List<Calendar> viewList;
+	
+	private Calendar nowview=null;
 	
 	int w=0;
 	int h=0;
@@ -65,14 +68,12 @@ public class MainWin extends Activity implements OnClickListener
 	
 	private void winShow()
 	{
-		txv_date.setText(tao.app.agplan.var.Info.s_year+"年"+tao.app.agplan.var.Info.s_month+"月"+tao.app.agplan.var.Info.s_dayofmonth+"日");
+		updatelist();
 		
-		tasklist.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1));
-		
-		if(nowv!=null)
+		if(nowview!=null)
 		{
-			nowv.updateInfo();
-			nowv.updateView();
+			nowview.updateInfo();
+			nowview.updateView();
 		}
 	}
 
@@ -87,6 +88,8 @@ public class MainWin extends Activity implements OnClickListener
 		ly_main=(LinearLayout)findViewById(R.id.ly_main);
 		ly_sidebar=(LinearLayout)findViewById(R.id.ly_sidebar);
 		ly_mask=(LinearLayout)findViewById(R.id.ly_mask);
+		
+		btn_check=(ImageView)findViewById(R.id.btn_check);
 		
 		viewPager=(ViewPager)findViewById(R.id.viewpager);
 		
@@ -149,15 +152,40 @@ public class MainWin extends Activity implements OnClickListener
 			}
 		});
 	}
-
+	
+	private void addAdapter()
+	{
+		tasklist.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,tao.app.agplan.var.Task.title));
+	}
+	
 	private void addListener()
 	{
 		btn_opensidebar.setOnClickListener(this);
 		btn_addnewtask.setOnClickListener(this);
+		btn_check.setOnClickListener(this);
 		
 		txv_date.setOnClickListener(this);
 		
 		ly_mask.setOnClickListener(this);
+		
+		tasklist.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				if(tao.app.agplan.var.Temo.lastpos!=-1)
+				{
+					tao.app.agplan.var.Task.title[tao.app.agplan.var.Temo.lastpos]=tao.app.agplan.var.Temo.title;
+				}
+				
+				tao.app.agplan.var.Temo.nowpos=position;
+				tao.app.agplan.var.Temo.lastpos=position;
+				tao.app.agplan.var.Temo.subtitle=tao.app.agplan.var.Task.title[position];
+				tao.app.agplan.var.Temo.title=tao.app.agplan.var.Task.title[position];
+				tao.app.agplan.var.Task.title[position]="—>"+tao.app.agplan.var.Task.title[position]+"<—";
+				
+				addAdapter();
+			}
+		});
 	}
 	
 	private void Init()
@@ -166,7 +194,6 @@ public class MainWin extends Activity implements OnClickListener
 		tao.app.agplan.var.Info.is_running=true;
 	}
 	
-	@SuppressWarnings("deprecation")
 	private void viewPagerSet()
 	{
 		c1=new Calendar(this);
@@ -189,11 +216,6 @@ public class MainWin extends Activity implements OnClickListener
 			public int getCount()
 			{
 				return Integer.MAX_VALUE;
-			}
-			
-			public void destroyItem(ViewGroup container,int position,Object object)
-			{
-				
 			}
 			
 			public Object instantiateItem(ViewGroup container,int position)
@@ -246,7 +268,7 @@ public class MainWin extends Activity implements OnClickListener
 	            	 viewList.get(i).updateView();
 	             }
 	             
-	             nowv=(Calendar)view;
+	             nowview=(Calendar)view;
 	             
 	             return view;
 			}
@@ -260,8 +282,12 @@ public class MainWin extends Activity implements OnClickListener
 	{
 		txv_date.setText(tao.app.agplan.var.Info.s_year+"年"+tao.app.agplan.var.Info.s_month+"月"+tao.app.agplan.var.Info.s_dayofmonth+"日");
 		
+		tao.app.agplan.var.Temo.lastpos=-1;
+		tao.app.agplan.var.Temo.nowpos=-1;
+		
 		tao.app.agplan.store.SQLiteDateBaseStore.gettask();
 		tasklist.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,tao.app.agplan.var.Task.title));
+		//这里这里test
 	}
 	
 	private void slideout()
@@ -305,6 +331,24 @@ public class MainWin extends Activity implements OnClickListener
 	{
 		switch (v.getId())
 		{
+		case R.id.btn_check:
+			
+			int pos=tao.app.agplan.var.Temo.nowpos;
+			if(pos!=-1)
+			{
+				tao.app.agplan.store.SQLiteDateBaseStore.deltask(tao.app.agplan.var.Temo.subtitle, tao.app.agplan.var.Task.content[tao.app.agplan.var.Temo.nowpos]);
+				
+				updatelist();
+			}
+			
+			ObjectAnimator oa=ObjectAnimator.ofFloat(btn_check, "alpha",(float)1,(float)0.5);
+			oa.setDuration(200);
+			oa.start();
+			oa=ObjectAnimator.ofFloat(btn_check, "alpha",(float)0.5,(float)1);
+			oa.setDuration(200);
+			oa.start();
+			break;
+		
 		case R.id.btn_opensidebar:
 			slideout();
 			break;
@@ -351,5 +395,11 @@ public class MainWin extends Activity implements OnClickListener
 			return true;
         }
         return super.onKeyDown(keyCode, event);
+	}
+	
+	protected void onRestart()
+	{
+		super.onRestart();
+		updatelist();
 	}
 }
